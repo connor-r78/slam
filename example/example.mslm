@@ -1,0 +1,13 @@
+modl maaa
+
+saaa = "hello, world\n"
+
+algo aaaa
+{
+  prnt saaa
+
+  xpct {
+    outp == saaa,
+    outp::leng == 13
+  }
+}

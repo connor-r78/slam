@@ -1,0 +1,8 @@
+mod Hello
+
+goal hello 
+{
+  expect { out "hello, world\n" }
+
+  limit { out::len = 13 }
+}
