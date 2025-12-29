@@ -1,4 +1,9 @@
 module Main (main) where
 
+import System.Environment (getArgs)
+
 main :: IO ()
-main = putStrLn "TODO"
+main = do
+  args <- getArgs
+  case args of
+    [file] -> putStrLn ("Input: " ++ file)
