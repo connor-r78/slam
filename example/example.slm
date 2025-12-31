@@ -1,3 +1,5 @@
+// This is a comment
+
 mod Hello
 
 goal hello 

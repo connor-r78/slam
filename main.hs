@@ -1,23 +1,25 @@
 module Main ( main ) where
 
+import Parser
 import System.Environment
 import System.IO
 
-usage = do
-  progName <- getProgName
-  putStrLn ("Usage: " ++ progName ++ " <input file>")
+usage :: String -> String
+usage progName = "Usage: " ++ progName ++ " <input file>"
 
 main = do
   args <- getArgs
+  progName <- getProgName
   case args of
     [file] -> compile file
-    _ -> usage
+    _ -> do putStrLn $ usage progName
 
 compile :: FilePath -> IO ()
 compile file =
   withFile file ReadMode $ \handle -> do
-    slm <- getLines handle
-    sequence_ $ map putStrLn slm
+    slm <- getSlm handle
+    let ir = parse slm
+    sequence_ $ map putStrLn ir
 
-getLines :: Handle -> IO [String]
-getLines h = hGetContents h >>= return . lines
+getSlm :: Handle -> IO [String]
+getSlm h = hGetContents h >>= return . lines
