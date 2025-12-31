@@ -1,5 +1,7 @@
 module Main ( main ) where
 
+import Control.Monad
+import Lexer
 import Parser
 import System.Environment
 import System.IO
@@ -7,6 +9,7 @@ import System.IO
 usage :: String -> String
 usage progName = "Usage: " ++ progName ++ " <input file>"
 
+main :: IO ()
 main = do
   args <- getArgs
   progName <- getProgName
@@ -17,9 +20,6 @@ main = do
 compile :: FilePath -> IO ()
 compile file =
   withFile file ReadMode $ \handle -> do
-    slm <- getSlm handle
-    let ir = lexTokens slm
-    mapM_ (putStrLn . pretty) ir
-
-getSlm :: Handle -> IO [String]
-getSlm h = hGetContents h >>= return . lines
+      contents <- hGetContents handle
+      let tokens = lexTokens (split contents)
+      forM_ tokens (putStrLn . pretty)

@@ -7,16 +7,16 @@ import Data.Maybe
 import Lexer
 
 data Token
-  = TokIdent String
-  | TokKeyword String
+  = TokKeyword String
+  | TokIdent String
   | TokOperator String
   | TokDelimiter String
   deriving (Show)
 
 pretty :: Token -> String
 pretty (TokDelimiter str) = str
-pretty (TokIdent str)     = str
 pretty (TokKeyword str)   = str
+pretty (TokIdent str)     = str
 pretty (TokOperator str)  = str
 
 format :: String -> Maybe Token
