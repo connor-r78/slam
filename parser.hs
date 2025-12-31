@@ -10,4 +10,4 @@ format str
     comment = isComment str
 
 parse :: [String] -> [String]
-parse slm = map format slm
+parse slm = filter (/= "") (map format slm)
