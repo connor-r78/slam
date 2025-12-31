@@ -18,8 +18,8 @@ compile :: FilePath -> IO ()
 compile file =
   withFile file ReadMode $ \handle -> do
     slm <- getSlm handle
-    let ir = parse slm
-    sequence_ $ map putStrLn ir
+    let ir = lexTokens slm
+    mapM_ (putStrLn . pretty) ir
 
 getSlm :: Handle -> IO [String]
 getSlm h = hGetContents h >>= return . lines

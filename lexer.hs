@@ -16,7 +16,7 @@ isDelimiter :: String -> Bool
 isDelimiter line = False
 
 isIdentifier :: String -> Bool
-isIdentifier line = False
+isIdentifier line = True
 
 isKeyword :: String -> Bool
 isKeyword line = False
