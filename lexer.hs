@@ -1,10 +1,8 @@
 module Lexer ( 
-  isComment,
   isDelimiter,
   isIdentifier,
   isKeyword,
   isOperator,
-  isWhitespace,
   split
 ) where
 
@@ -13,31 +11,48 @@ import Data.List
 
 split :: String -> [String]
 split [] = []
-split (c:cs)
+split s@(c:cs)
   | isSpace c = split cs
+  | "//" `isPrefixOf` s =
+    split (dropWhile (/= '\n') s)
   | isAlpha c =
-      let (name, rest) = span isAlphaNum (c:cs)
-      in name : split rest
+    let (name, rest) = span isAlphaNum s
+    in name : split rest
   | isDigit c =
-      let (num, rest) = span isDigit (c:cs)
-      in num : split rest
+    let (num, rest) = span isDigit s
+    in num : split rest
+  | Just (op, rest) <- matchOperator s =
+    op : split rest
   | otherwise =
-      [c] : split cs
+    [c] : split cs
 
-isComment :: String -> Bool
-isComment line = "//" `isInfixOf` line
+operators :: [String]
+operators =
+  ["=", "::"]
 
-isDelimiter :: String -> Bool
-isDelimiter line = False
+sortedOperators :: [String]
+sortedOperators =
+  sortBy (\a b -> compare (length b) (length a)) operators
 
-isIdentifier :: String -> Bool
-isIdentifier line = True
+matchOperator :: String -> Maybe (String, String)
+matchOperator input =
+  case find (`isPrefixOf` input) sortedOperators of
+    Just op -> Just (op, drop (length op) input)
+    Nothing -> Nothing
 
 isKeyword :: String -> Bool
-isKeyword line = False
+isKeyword s = s `elem` ["expect",
+                        "goal",
+                        "limit",
+                        "mod"]
 
 isOperator :: String -> Bool
-isOperator line = False
+isOperator s = s `elem` operators
 
-isWhitespace :: String -> Bool
-isWhitespace line = False
+isDelimiter :: String -> Bool
+isDelimiter s = s `elem` ["{", "}", "\""]
+
+isIdentifier :: String -> Bool
+isIdentifier [] = False
+isIdentifier (c:cs) =
+  isAlpha c && all isAlphaNum cs && not (isKeyword (c:cs))

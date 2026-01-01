@@ -21,10 +21,8 @@ pretty (TokOperator str)  = str
 
 format :: String -> Maybe Token
 format str
-  | isComment str    = Nothing
-  | isWhitespace str = Nothing
-  | isIdentifier str = Just (TokIdent str)
   | isKeyword str    = Just (TokKeyword str)
+  | isIdentifier str = Just (TokIdent str)
   | isOperator str   = Just (TokOperator str)
   | isDelimiter str  = Just (TokDelimiter str)
   | otherwise        = Nothing
