@@ -1,4 +1,4 @@
-ghc main.hs lexer.hs parser.hs -o slamc.out
+ghc -dynamic main.hs lexer.hs parser.hs -o slamc.out
 
 rm *.hi
 rm *.o
