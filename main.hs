@@ -21,4 +21,4 @@ compile :: FilePath -> IO ()
 compile file =
   withFile file ReadMode $ \handle -> do
     contents <- hGetContents handle
-    print $ createTree $ lexTokens $ split contents
+    putStrLn . prettyTree $ createTree $ lexTokens $ split contents
