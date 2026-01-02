@@ -21,5 +21,4 @@ compile :: FilePath -> IO ()
 compile file =
   withFile file ReadMode $ \handle -> do
     contents <- hGetContents handle
-    let tokens = lexTokens (split contents)
-    forM_ tokens (putStrLn . pretty)
+    print $ createTree $ lexTokens $ split contents
